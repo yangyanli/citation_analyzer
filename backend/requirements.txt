@@ -1,0 +1,8 @@
+scholarly>=1.7,<2
+requests>=2.31,<3
+google-genai>=1.0,<2
+python-dotenv>=1.0,<2
+pytest>=7.0,<9
+tiktoken>=0.5,<1
+fastapi>=0.115,<1
+uvicorn[standard]>=0.30,<1

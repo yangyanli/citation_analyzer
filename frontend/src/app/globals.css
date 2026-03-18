@@ -1,0 +1,524 @@
+@import "tailwindcss";
+
+@variant dark (&:is(.dark *));
+
+:root {
+  /* Light Theme Variables */
+  --background: #f8fafc; /* Slate 50 */
+  --foreground: #0f172a; /* Slate 900 */
+  
+  --primary: #6366f1; /* Indigo 500 */
+  --primary-hover: #4f46e5; /* Indigo 600 */
+  --success: #10b981; /* Emerald 500 */
+
+  --surface: rgba(255, 255, 255, 0.7);
+  --surface-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+  /* Dark Theme Variables */
+  --background: #0B1120; /* Deep Slate */
+  --foreground: #f8fafc; /* Slate 50 */
+  
+  --primary: #6366f1; /* Indigo 500 */
+  --primary-hover: #818cf8; /* Indigo 400 */
+
+  --surface: rgba(30, 41, 59, 0.4);
+  --surface-border: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,50%,0.08) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,50%,0.08) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,50%,0.08) 0, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.dark body {
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,0.15) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,0.15) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,0.15) 0, transparent 50%);
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 1rem;
+}
+
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-border);
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes sentimentFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes segmentReveal {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* Tooltip System */
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  color: #334155;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: nowrap;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dark [data-tooltip]::after {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  color: #cbd5e1;
+}
+
+[data-tooltip]::before {
+  content: '';
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.dark [data-tooltip]::before {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+[data-tooltip]:hover::before {
+  opacity: 1;
+}
+
+/* Tooltip variant: position above */
+[data-tooltip-pos="top"]::after {
+  top: auto;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%) translateY(-4px);
+}
+
+[data-tooltip-pos="top"]::before {
+  top: auto;
+  bottom: calc(100% + 2px);
+  border-bottom-color: transparent;
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark [data-tooltip-pos="top"]::before {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-tooltip-pos="top"]:hover::after {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==================== MOBILE TABLE → CARDS ==================== */
+@media screen and (max-width: 767px) {
+  /* Hide table headers on mobile */
+  .citation-table thead {
+    display: none;
+  }
+
+  .citation-table,
+  .citation-table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  /* Each row becomes a card */
+  .citation-table tbody tr {
+    display: block;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .dark .citation-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Each cell becomes a block */
+  .citation-table tbody td {
+    display: block;
+    width: 100% !important;
+    padding: 0.5rem 0 !important;
+    border-left: none !important;
+  }
+
+  /* Add labels before cells */
+  .citation-table tbody td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgb(100, 116, 139);
+    margin-bottom: 0.35rem;
+  }
+
+  /* Hide empty cells on mobile */
+  .citation-table tbody td:empty {
+    display: none;
+    padding: 0 !important;
+  }
+
+  /* Year and venue on the same line on mobile */
+  .citation-table tbody .mobile-meta-row {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+}
+
+/* Hidden on screen, shown in print */
+.print-only-criteria {
+  display: none !important;
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  /* === 1. BASE RESET: white background, dark text === */
+  :root {
+    --background: #fff !important;
+    --foreground: #1e293b !important;
+    --surface: #fff !important;
+    --surface-border: #e2e8f0 !important;
+  }
+
+  body {
+    background: #fff !important;
+    background-image: none !important;
+    color: #1e293b !important;
+    font-size: 11px !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Kill decorative background images/gradients everywhere */
+  * {
+    background-image: none !important;
+  }
+
+  /* === 2. GLASSMORPHISM → flat white cards === */
+  .glass-panel,
+  .glass-card {
+    background: #fff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+  }
+
+  /* === 3. TEXT COLOR OVERRIDES === */
+  .text-white, .text-slate-100, .text-slate-200, .text-slate-300 {
+    color: #1e293b !important;
+  }
+  .text-slate-400, .text-slate-500, .text-slate-600 {
+    color: #64748b !important;
+  }
+  .text-indigo-300, .text-indigo-400 {
+    color: #4f46e5 !important;
+  }
+
+  /* === 4. NEUTRALIZE DARK BACKGROUNDS === */
+  /* Specific dark bg classes used throughout the app */
+  .bg-slate-900,
+  .bg-slate-950,
+  .bg-slate-800 {
+    background-color: #fff !important;
+  }
+
+  /* Evidence quote and notable author card backgrounds → light gray */
+  .citation-table div[class*="bg-slate"] {
+    background-color: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+  }
+
+  /* Search bar and filter bar backgrounds */
+  div[class*="bg-slate-900\\/30"],
+  div[class*="bg-slate-900\\/40"],
+  div[class*="bg-white\\/"] {
+    background-color: transparent !important;
+  }
+
+  /* === 5. HIDE INTERACTIVE-ONLY ELEMENTS === */
+  [class~="print:hidden"] {
+    display: none !important;
+  }
+  /* Show print-only criteria in print */
+  .print-only-criteria {
+    display: grid !important;
+    margin-top: 1rem;
+  }
+  /* Hide chevron toggle in criteria box */
+  .glass-panel svg[class*="text-slate-400"] {
+    display: none !important;
+  }
+  #export-menu,
+  #clear-domain-filter,
+  #search-fields-toggle,
+  #search-field-chips {
+    display: none !important;
+  }
+
+  /* Hide search bar and filter checkboxes in print */
+  .citation-table ~ div,
+  input[type="search"],
+  input[type="text"][placeholder*="Search"] {
+    display: none !important;
+  }
+  [data-tooltip]::after,
+  [data-tooltip]::before {
+    display: none !important;
+  }
+
+  /* Hide edit/delete/revert buttons */
+  [title="Edit"], [title="Delete"], [title="Edit Year"],
+  [title="Edit Venue"], [title="Edit Paper Info"],
+  [title="Revert to AI data"] {
+    display: none !important;
+  }
+
+  /* Citation context hover overlay */
+  .absolute.left-0.top-full {
+    display: none !important;
+  }
+
+  /* Remove all animations */
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* === 6. METRIC CARDS === */
+  .grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* === 7. CITATION TABLE LAYOUT === */
+  .citation-table {
+    font-size: 10px !important;
+    table-layout: fixed !important;
+    width: 100% !important;
+  }
+
+  /* Column widths for print */
+  .citation-table th:nth-child(1), .citation-table td:nth-child(1) { width: 25% !important; }
+  .citation-table th:nth-child(2), .citation-table td:nth-child(2) { width: 20% !important; }
+  .citation-table th:nth-child(3), .citation-table td:nth-child(3) { width: 6% !important; }
+  .citation-table th:nth-child(4), .citation-table td:nth-child(4) { width: 12% !important; font-size: 8px !important; }
+  .citation-table th:nth-child(5), .citation-table td:nth-child(5) { width: 37% !important; }
+
+  /* Condense notable author cards for print */
+  .citation-table td:nth-child(2) > div {
+    gap: 2px !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  /* Notable author cards: minimal padding, no background box */
+  .citation-table td:nth-child(2) > div > div {
+    padding: 1px 0 !important;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+  }
+  /* Allow wrapping in author card flex row for print */
+  .citation-table td:nth-child(2) > div > div > div {
+    flex-wrap: wrap !important;
+  }
+  /* Remove truncation on author names in print */
+  .citation-table td:nth-child(2) .truncate {
+    overflow: visible !important;
+    text-overflow: unset !important;
+    white-space: normal !important;
+  }
+  /* Hide "Notable" label in print — unnecessary, saves space */
+  .citation-table td:nth-child(2) span[class*="uppercase"][class*="tracking-wider"][class*="text-indigo"] {
+    display: none !important;
+  }
+  /* Hide edit buttons, homepage links, verified icons in print */
+  .citation-table td:nth-child(2) button,
+  .citation-table td:nth-child(2) a,
+  .citation-table td:nth-child(2) textarea,
+  .citation-table td:nth-child(2) input {
+    display: none !important;
+  }
+  /* Seminal card: hide evidence, keep badge */
+  .citation-table td:nth-child(2) div[class*="border-yellow"] .italic {
+    display: none !important;
+  }
+
+  .citation-table thead th {
+    color: #475569 !important;
+    border-bottom: 2px solid #cbd5e1 !important;
+    padding: 4px 6px !important;
+    background: #f8fafc !important;
+    font-size: 9px !important;
+    overflow: hidden !important;
+  }
+  /* Hide sort arrows in print */
+  .citation-table thead th svg {
+    display: none !important;
+  }
+  .citation-table thead th div {
+    gap: 0 !important;
+  }
+
+  .citation-table tbody td {
+    padding: 6px 8px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+    vertical-align: top;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow: hidden !important;
+    border-left-color: transparent !important;
+  }
+
+  .citation-table tbody tr:hover {
+    background: transparent !important;
+  }
+
+  /* Keep "Evidence Quote" header on one line in print */
+  .citation-table td:nth-child(5) div[class*="bg-slate-900"] > div:first-child {
+    white-space: nowrap !important;
+    font-size: 8px !important;
+  }
+
+  /* Truncate evidence quotes to save vertical space */
+  .citation-table div[class*="bg-slate-900"] p,
+  .citation-table .font-serif {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* === 8. PAGE BREAKS === */
+  /* Allow large panels to break across pages — only avoid breaks within rows */
+  .citation-table tr {
+    break-inside: avoid;
+  }
+  h1, h2, h3 {
+    break-after: avoid;
+  }
+
+  /* === 9. DOMAIN CHART === */
+  #domain-chart-container {
+    background: #fff !important;
+  }
+
+  /* === 10. FOOTER === */
+  footer {
+    border-top-color: #e2e8f0 !important;
+  }
+  footer p {
+    color: #64748b !important;
+  }
+
+  /* === 11. GRADIENT TEXT → solid === */
+  [class*="bg-gradient"] {
+    background: none !important;
+    -webkit-text-fill-color: #1e293b !important;
+    color: #1e293b !important;
+  }
+
+  /* === 12. PRESERVE BADGE COLORS === */
+  [class*="bg-emerald"], [class*="bg-amber"], [class*="bg-rose"],
+  [class*="bg-purple"], [class*="bg-blue"], [class*="bg-orange"],
+  [class*="bg-violet"], [class*="rounded-full"] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* === 13. HEADER ICON === */
+  .h-10.w-10 {
+    display: none !important;
+  }
+}
+
